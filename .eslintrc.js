@@ -16,5 +16,6 @@ module.exports = {
     'no-param-reassign': 0,
     'no-underscore-dangle': 0,
     indent: ['error', 2],
+    'no-plusplus': 0,
   },
 };
