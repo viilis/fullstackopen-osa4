@@ -17,5 +17,6 @@ module.exports = {
     'no-underscore-dangle': 0,
     indent: ['error', 2],
     'no-plusplus': 0,
+    'max-len':200,
   },
 };

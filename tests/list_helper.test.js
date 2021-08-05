@@ -34,3 +34,52 @@ describe('favorite show', () => {
     });
   });
 });
+describe('most blogs', () => {
+  const list = [{
+    title: 'awesome-title',
+    likes: 2,
+    author: 'doge',
+    blogs: 99,
+  },
+  {
+    title: 'awesome-title 2',
+    likes: 122,
+    author: 'doge',
+    blogs: 1,
+  },
+  {
+    title: 'awesome-title 3',
+    likes: 12,
+    author: 'egod',
+    blogs: 33,
+  },
+  ];
+  test('should return author with most blogs', () => {
+    expect(listHelper.mostBlogs(list)).toEqual({ author: 'doge', blogs: 99 });
+  });
+});
+
+describe('most likes', () => {
+  const list = [{
+    title: 'awesome-title',
+    likes: 2,
+    author: 'doge',
+    blogs: 99,
+  },
+  {
+    title: 'awesome-title 2',
+    likes: 122,
+    author: 'doge',
+    blogs: 1,
+  },
+  {
+    title: 'awesome-title 3',
+    likes: 12,
+    author: 'egod',
+    blogs: 33,
+  },
+  ];
+  test('return console log', () => {
+    expect(listHelper.mostLikes(list)).toEqual({ author: 'doge', likes: 124 });
+  });
+});
