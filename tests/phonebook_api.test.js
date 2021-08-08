@@ -17,6 +17,13 @@ test('http get test', async () => {
     expect(res.body).toHaveLength(helper.initBlogs.length)
 });
 
+test('_id turn into id', async () => {
+    const res = await api.get('/api/blogs')
+    for(let blog of res.body){
+        expect(Object.keys(blog)).toContain('id');
+    }
+});
+
 afterAll( () => {
     mongoose.connection.close()
 });
