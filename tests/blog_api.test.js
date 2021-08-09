@@ -60,8 +60,15 @@ test('if "likes" -field is empty, turn it into zero', async () => {
   expect(likes).not.toContain(undefined);
 });
 
-test('', () => {
-
+test('title or url missing, responses with status 400', async () => {
+    const newBlog = {
+        author: 'dogedox',
+        likes: '',
+      };
+      await api
+      .post('/api/blogs/')
+      .send(newBlog)
+      .expect(400)
 });
 
 afterAll(() => {
