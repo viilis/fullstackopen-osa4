@@ -12,7 +12,7 @@ const initBlogs = [
         author: "awesome-author-2",
         url: "awesome-url-2",
         likes: 2
-    }
+    },
 ];
 
 const allBlogsFromDB = async () => {

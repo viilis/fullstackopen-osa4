@@ -43,6 +43,24 @@ test('http POST for posting a blog', async () => {
     expect(titles).toContain('post-test');
 });
 
+test('if "likes" -field is empty, turn it into zero', async () => {
+    const newBlog = {
+        title: 'post-test',
+        author: 'dogedox',
+        url: 'awesome-url',
+        likes: '',
+    }
+    await api
+    .post('/api/blogs/')
+    .send(newBlog)
+    .expect(200)
+
+    const res = await api.get('/api/blogs')
+    const likes =  res.body.map(b => b.likes)
+
+    expect(likes).not.toContain(undefined);
+});
+
 afterAll( () => {
     mongoose.connection.close()
 });
