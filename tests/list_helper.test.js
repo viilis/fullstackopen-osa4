@@ -73,7 +73,7 @@ describe('most likes', () => {
     blogs: 33,
   },
   ];
-  test('return console log', () => {
+  test('return most liked author', () => {
     expect(listHelper.mostLikes(list)).toEqual({ author: 'doge', likes: 124 });
   });
 });
