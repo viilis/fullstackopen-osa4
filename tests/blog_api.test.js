@@ -80,6 +80,23 @@ test('delete by id', async () =>{
   expect(await helper.allBlogsFromDB()).toHaveLength(helper.initBlogs.length - 1)
 });
 
+test('update by id', async () => {
+  const newBlog = {
+    title: 'put-test',
+    author: 'dogedox',
+    url: 'awesome-url',
+    likes: 0,
+  };
+  
+  const allIDs = await helper.allIDs()
+  await api
+  .put(`/api/blogs/${allIDs[0]}`)
+  .send(newBlog)
+  .expect(200)
+
+  expect(await helper.allTitlesFromBlogs()).toContain('put-test')
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

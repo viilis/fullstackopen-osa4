@@ -27,8 +27,15 @@ const allIDs = async () => {
   return ids
 }
 
+const allTitlesFromBlogs = async () => {
+  const blogs = await allBlogsFromDB()
+  const titles = []
+  blogs.map(b => titles.push(b.title));
+  return titles
+}
 module.exports = {
   initBlogs,
   allBlogsFromDB,
   allIDs,
+  allTitlesFromBlogs,
 };
