@@ -36,6 +36,13 @@ blogRouter.post('/', async (req, res, next) => {
   }
 });
 
+blogRouter.delete('/:id', async (req, res) => {
+  await Blog.findByIdAndRemove(req.params.id)
+  const allBlogs = await Blog.find({})
+  allBlogs.map(b => b.toJSON())
+  res.status(204).json(allBlogs)
+});
+
 module.exports = {
   blogRouter,
 };

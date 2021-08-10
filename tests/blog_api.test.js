@@ -71,6 +71,15 @@ test('title or url missing, responses with status 400', async () => {
       .expect(400)
 });
 
+test('delete by id', async () =>{
+  const allIDs = await helper.allIDs()
+  await api
+  .delete(`/api/blogs/${allIDs[0]}`)
+  .expect(204)
+
+  expect(await helper.allBlogsFromDB()).toHaveLength(helper.initBlogs.length - 1)
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
