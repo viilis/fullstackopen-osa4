@@ -17,22 +17,22 @@ const initBlogs = [
 
 const allBlogsFromDB = async () => {
   const blogs = await Blogs.find({});
-  return blogs.map(b => b.toJSON());
+  return blogs.map((b) => b.toJSON());
 };
 
 const allIDs = async () => {
-  const blogs = await allBlogsFromDB()
-  const ids = []
-  blogs.map(b => ids.push(b.id))
-  return ids
-}
+  const blogs = await allBlogsFromDB();
+  const ids = [];
+  blogs.map((b) => ids.push(b.id));
+  return ids;
+};
 
 const allTitlesFromBlogs = async () => {
-  const blogs = await allBlogsFromDB()
-  const titles = []
-  blogs.map(b => titles.push(b.title));
-  return titles
-}
+  const blogs = await allBlogsFromDB();
+  const titles = [];
+  blogs.map((b) => titles.push(b.title));
+  return titles;
+};
 module.exports = {
   initBlogs,
   allBlogsFromDB,

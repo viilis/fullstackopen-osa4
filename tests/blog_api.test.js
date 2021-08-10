@@ -61,23 +61,23 @@ test('if "likes" -field is empty, turn it into zero', async () => {
 });
 
 test('title or url missing, responses with status 400', async () => {
-    const newBlog = {
-        author: 'dogedox',
-        likes: '',
-      };
-      await api
-      .post('/api/blogs/')
-      .send(newBlog)
-      .expect(400)
+  const newBlog = {
+    author: 'dogedox',
+    likes: '',
+  };
+  await api
+    .post('/api/blogs/')
+    .send(newBlog)
+    .expect(400);
 });
 
-test('delete by id', async () =>{
-  const allIDs = await helper.allIDs()
+test('delete by id', async () => {
+  const allIDs = await helper.allIDs();
   await api
-  .delete(`/api/blogs/${allIDs[0]}`)
-  .expect(204)
+    .delete(`/api/blogs/${allIDs[0]}`)
+    .expect(204);
 
-  expect(await helper.allBlogsFromDB()).toHaveLength(helper.initBlogs.length - 1)
+  expect(await helper.allBlogsFromDB()).toHaveLength(helper.initBlogs.length - 1);
 });
 
 test('update by id', async () => {
@@ -87,14 +87,14 @@ test('update by id', async () => {
     url: 'awesome-url',
     likes: 0,
   };
-  
-  const allIDs = await helper.allIDs()
-  await api
-  .put(`/api/blogs/${allIDs[0]}`)
-  .send(newBlog)
-  .expect(200)
 
-  expect(await helper.allTitlesFromBlogs()).toContain('put-test')
+  const allIDs = await helper.allIDs();
+  await api
+    .put(`/api/blogs/${allIDs[0]}`)
+    .send(newBlog)
+    .expect(200);
+
+  expect(await helper.allTitlesFromBlogs()).toContain('put-test');
 });
 
 afterAll(() => {

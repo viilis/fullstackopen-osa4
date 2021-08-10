@@ -7,10 +7,10 @@ const undefCheck = (element) => {
   }
 };
 
-const checkTitleAndUrl = (body,res) => {
-  const keys = Object.keys(body)
-  if(((keys.includes('title')===false) && (keys.includes('url')===false))){
-    res.status(400).end()
+const checkTitleAndUrl = (body, res) => {
+  const keys = Object.keys(body);
+  if (((keys.includes('title') === false) && (keys.includes('url') === false))) {
+    res.status(400).end();
   }
 };
 
@@ -20,7 +20,7 @@ blogRouter.get('/', async (req, res) => {
 });
 
 blogRouter.post('/', async (req, res, next) => {
-  checkTitleAndUrl(req.body,res)
+  checkTitleAndUrl(req.body, res);
   const like = undefCheck(req.body.likes);
   const blog = new Blog({
     title: req.body.title,
@@ -37,18 +37,18 @@ blogRouter.post('/', async (req, res, next) => {
 });
 
 blogRouter.delete('/:id', async (req, res) => {
-  await Blog.findByIdAndRemove(req.params.id)
-  const allBlogs = await Blog.find({})
-  allBlogs.map(b => b.toJSON())
-  res.status(204).json(allBlogs)
+  await Blog.findByIdAndRemove(req.params.id);
+  const allBlogs = await Blog.find({});
+  allBlogs.map((b) => b.toJSON());
+  res.status(204).json(allBlogs);
 });
 
-blogRouter.put('/:id', async (req,res,next) => {
-  try{
-    const result = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true, context: 'query' })
-    res.status(200).json(result)
-  }catch(exception){
-    next(exception)
+blogRouter.put('/:id', async (req, res, next) => {
+  try {
+    const result = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true, context: 'query' });
+    res.status(200).json(result);
+  } catch (exception) {
+    next(exception);
   }
 });
 
