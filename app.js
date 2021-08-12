@@ -4,7 +4,8 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./utils/config');
-const Router = require('./controllers/blogs');
+const BRouter = require('./controllers/blogs');
+const URouter = require('./controllers/users');
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 
@@ -23,7 +24,8 @@ mongoose.connect(config.MONGODB_URI, {
 app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
-app.use('/api/blogs', Router.blogRouter);
 app.use(middleware.errorHandler);
+app.use('/api/blogs', BRouter.blogRouter);
+app.use('/api/users', URouter.userRouter);
 
 module.exports = app;
