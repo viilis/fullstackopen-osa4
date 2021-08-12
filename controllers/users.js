@@ -14,6 +14,9 @@ userRouter.get('/', async (req,res,next) => {
 
 userRouter.post('/', async (req,res,next) => {
     try{
+        if(req.body.password.length < 3){
+            return res.status(400).send({error: 'password has to atleast three characters long'})
+        }
         const passwordHash = await bcrypt.hash(req.body.password,Number(config.SALTROUNDS));
         const newUser = new User({
         username: req.body.username,
