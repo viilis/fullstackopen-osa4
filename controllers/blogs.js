@@ -29,7 +29,6 @@ blogRouter.post('/', async (req, res, next) => {
     url: req.body.url,
     likes: like,
   });
-  console.log(blog.likes);
   try {
     const savedBlog = await blog.save();
     res.json(savedBlog.toJSON());
