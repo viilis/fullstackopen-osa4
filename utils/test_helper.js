@@ -18,16 +18,16 @@ const initBlogs = [
 
 const initUsers = [
   {
-    username:'testuser',
+    username: 'testuser',
     password: 'superduperpassword',
     name: 'testname',
   },
   {
-    username:'testuser2',
+    username: 'testuser2',
     password: 'superduperpassword2',
     name: 'testname2',
   },
-]
+];
 
 const allUsersFromDB = async () => {
   const users = await Users.find({});

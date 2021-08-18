@@ -12,10 +12,10 @@ beforeEach(async () => {
 });
 
 test('GET all users', async () => {
-    const res = await api.get('/api/users');
-    expect(res.body).toHaveLength(helper.initUsers.length);
-  });
+  const res = await api.get('/api/users');
+  expect(res.body).toHaveLength(helper.initUsers.length);
+});
 
 afterAll(() => {
-    mongoose.connection.close();
-  });
+  mongoose.connection.close();
+});

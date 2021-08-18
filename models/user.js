@@ -2,22 +2,22 @@ const mongoose = require('mongoose');
 const unique = require('mongoose-unique-validator');
 
 const userSchema = mongoose.Schema({
-    username: {
-        type: String,
-        min: 3,
-        max: 30,
-        unique: true,
-        required: true,
-    },
-    password:{
-        type:String,
-        required: true,
-    },
-    name:{
-        type: String,
-        min: 3,
-        max : 30,
-    }
+  username: {
+    type: String,
+    min: 3,
+    max: 30,
+    unique: true,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    min: 3,
+    max: 30,
+  },
 });
 
 userSchema.plugin(unique);
@@ -27,7 +27,7 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-    delete returnedObject.password; //never returns password
+    delete returnedObject.password; // never returns password
   },
 });
 

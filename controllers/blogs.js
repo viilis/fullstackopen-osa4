@@ -4,9 +4,8 @@ const Blog = require('../models/blog');
 const undefCheck = (element) => {
   if ((typeof element === 'undefined') || (element === '') || (element == null)) {
     return 0;
-  }else{
-    return element
   }
+  return element;
 };
 
 const checkTitleAndUrl = (body, res) => {
@@ -30,7 +29,7 @@ blogRouter.post('/', async (req, res, next) => {
     url: req.body.url,
     likes: like,
   });
-  console.log(blog.likes)
+  console.log(blog.likes);
   try {
     const savedBlog = await blog.save();
     res.json(savedBlog.toJSON());
