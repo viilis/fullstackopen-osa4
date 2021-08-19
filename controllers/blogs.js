@@ -1,5 +1,7 @@
 const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
+const { findByIdAndUpdate } = require('../models/user');
+const User = require('../models/user')
 
 const undefCheck = (element) => {
   if ((typeof element === 'undefined') || (element === '') || (element == null)) {
@@ -15,22 +17,39 @@ const checkTitleAndUrl = (body, res) => {
   }
 };
 
+const checkIfNoUsers = (users,res) => {
+  if(users.length === 0){
+    return res.status(400).send({error: 'No user found. Please create user first'})
+  }
+  else{
+    return users
+  }
+}
+
 blogRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate('users');
   res.json(blogs.map((blog) => blog.toJSON()));
 });
 
 blogRouter.post('/', async (req, res, next) => {
-  checkTitleAndUrl(req.body, res);
-  const like = undefCheck(req.body.likes);
-  const blog = new Blog({
-    title: req.body.title,
-    author: req.body.author,
-    url: req.body.url,
-    likes: like,
-  });
   try {
+    checkTitleAndUrl(req.body, res);
+    //link for user to every blogpost
+    const user = checkIfNoUsers(await User.find({}),res)[0]
+    
+    const like = undefCheck(req.body.likes);
+    const blog = new Blog({
+      title: req.body.title,
+      author: req.body.author,
+      url: req.body.url,
+      likes: like,
+      users: user._id
+    });
     const savedBlog = await blog.save();
+
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
+
     res.json(savedBlog.toJSON());
   } catch (exception) {
     next(exception);

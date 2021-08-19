@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
     min: 3,
     max: 30,
   },
+  blogs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Blog'
+  }],
 });
 
 userSchema.plugin(unique);
