@@ -4,8 +4,11 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./utils/config');
+
 const BRouter = require('./controllers/blogs');
 const URouter = require('./controllers/users');
+const LRouter = require('./controllers/login')
+
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 
@@ -27,5 +30,6 @@ app.use(middleware.requestLogger);
 app.use(middleware.errorHandler);
 app.use('/api/blogs', BRouter.blogRouter);
 app.use('/api/users', URouter.userRouter);
+app.use('/api/login', LRouter.loginRouter)
 
 module.exports = app;
