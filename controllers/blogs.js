@@ -2,6 +2,8 @@ const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
 const { findByIdAndUpdate } = require('../models/user');
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const config = require('../utils/config')
 
 const undefCheck = (element) => {
   if ((typeof element === 'undefined') || (element === '') || (element == null)) {
@@ -26,6 +28,14 @@ const checkIfNoUsers = (users,res) => {
   }
 }
 
+const getToken = req => {
+  const aut = req.get('authorization')
+  if(aut && aut.toLowerCase().startsWith('bearer ')){
+    return aut.substring(7)
+  }
+  return null
+}
+
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('users');
   res.json(blogs.map((blog) => blog.toJSON()));
@@ -33,9 +43,19 @@ blogRouter.get('/', async (req, res) => {
 
 blogRouter.post('/', async (req, res, next) => {
   try {
+    const token = getToken(req)
+    console.log(token)
+    const decodedToken = jwt.verify(token,config.SECRET)
+    console.log(decodedToken)
+    if(!token || !decodedToken.id){
+      return res.status(401).json({error: 'token missing or invalid'})
+    }
     checkTitleAndUrl(req.body, res);
     //link for user to every blogpost
-    const user = checkIfNoUsers(await User.find({}),res)[0]
+
+    //const user = checkIfNoUsers(await User.find({}),res)[0]
+
+    const user = await User.findById(decodedToken.id)
     
     const like = undefCheck(req.body.likes);
     const blog = new Blog({

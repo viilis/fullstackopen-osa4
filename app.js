@@ -7,7 +7,7 @@ const config = require('./utils/config');
 
 const BRouter = require('./controllers/blogs');
 const URouter = require('./controllers/users');
-const LRouter = require('./controllers/login')
+const LRouter = require('./controllers/login');
 
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
@@ -15,7 +15,7 @@ const logger = require('./utils/logger');
 logger.info('connecting to', config.MONGODB_URI);
 
 mongoose.connect(config.MONGODB_URI, {
-  useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true, 
+  useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true,
 })
   .then(() => {
     logger.info('connected to MongoDB');
@@ -27,9 +27,9 @@ mongoose.connect(config.MONGODB_URI, {
 app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
-app.use(middleware.errorHandler);
 app.use('/api/blogs', BRouter.blogRouter);
 app.use('/api/users', URouter.userRouter);
-app.use('/api/login', LRouter.loginRouter)
+app.use('/api/login', LRouter.loginRouter);
+app.use(middleware.errorHandler);
 
 module.exports = app;

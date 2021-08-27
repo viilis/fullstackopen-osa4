@@ -1,7 +1,8 @@
-const helper = require('../utils/test_helper');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+const helper = require('../utils/test_helper');
 const app = require('../app');
+
 const api = supertest(app);
 
 const Users = require('../models/user');
@@ -20,26 +21,26 @@ test('password too short', async () => {
   const newUser = {
     username: 'superusername',
     password: 'a',
-    name: 'dakdjadkad'
-  }
+    name: 'dakdjadkad',
+  };
   await api
-  .post('/api/users/')
-  .send(newUser)
-  .expect(400)
+    .post('/api/users/')
+    .send(newUser)
+    .expect(400);
 });
 
 test('not unique name', async () => {
-  const users = await helper.allUsersFromDB()
-  const newUser ={
+  const users = await helper.allUsersFromDB();
+  const newUser = {
     username: users[0].username,
     password: 'dasdasdasdad',
-    name: 'dasdasdasd'
-  }
+    name: 'dasdasdasd',
+  };
 
   await api
-  .post('/api/users/')
-  .send(newUser)
-  .expect(500)
+    .post('/api/users/')
+    .send(newUser)
+    .expect(500);
 });
 
 afterAll(() => {

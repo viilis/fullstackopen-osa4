@@ -7,8 +7,8 @@ const blogSchema = mongoose.Schema({
   likes: Number,
   users: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
+    ref: 'User',
+  },
 });
 
 blogSchema.set('toJSON', {
