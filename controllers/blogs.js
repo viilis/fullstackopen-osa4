@@ -37,6 +37,7 @@ const getToken = req => {
   return null
 }
 blogRouter.use(middleware.tokenExtractor)
+blogRouter.use(middleware.userExtractor)
 
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('users');
@@ -45,18 +46,13 @@ blogRouter.get('/', async (req, res) => {
 
 blogRouter.post('/', async (req, res, next) => {
   try {
-    const decodedToken = jwt.verify(req.token,config.SECRET)
-    if(!req.token || !decodedToken.id){
-      return res.status(401).json({error: 'token missing or invalid'})
-    }
+
     checkTitleAndUrl(req.body, res);
-    //link for user to every blogpost
 
-    //const user = checkIfNoUsers(await User.find({}),res)[0]
-
-    const user = await User.findById(decodedToken.id)
+    const user = await User.findById(req.user)
     
     const like = undefCheck(req.body.likes);
+
     const blog = new Blog({
       title: req.body.title,
       author: req.body.author,
@@ -77,11 +73,9 @@ blogRouter.post('/', async (req, res, next) => {
 
 blogRouter.delete('/:id', async (req, res) => {
   try{
-    const decodedToken = jwt.verify(req.token,config.SECRET)
-    if(!req.token || !decodedToken.id){
-      return res.status(401).json({error: 'token missing or invalid'})
-    }
-    const user = await User.findById(decodedToken.id)
+
+    const user = await User.findById(req.user)
+    
     if(user.blogs.filter(b => b.toString()).includes(req.params.id)){
       await Blog.findByIdAndRemove(req.params.id);
 
@@ -90,7 +84,7 @@ blogRouter.delete('/:id', async (req, res) => {
 
       const allBlogs = await Blog.find({});
       allBlogs.map((b) => b.toJSON());
-      
+
       res.status(204).json(allBlogs);
     }
     else{
