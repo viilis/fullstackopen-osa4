@@ -4,6 +4,7 @@ const { findByIdAndUpdate } = require('../models/user');
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
+const middleware = require('../utils/middleware')
 
 const undefCheck = (element) => {
   if ((typeof element === 'undefined') || (element === '') || (element == null)) {
@@ -36,18 +37,16 @@ const getToken = req => {
   return null
 }
 
+
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('users');
   res.json(blogs.map((blog) => blog.toJSON()));
 });
 
-blogRouter.post('/', async (req, res, next) => {
+blogRouter.post('/',middleware.tokenExtractor, async (req, res, next) => {
   try {
-    const token = getToken(req)
-    console.log(token)
-    const decodedToken = jwt.verify(token,config.SECRET)
-    console.log(decodedToken)
-    if(!token || !decodedToken.id){
+    const decodedToken = jwt.verify(req.token,config.SECRET)
+    if(!req.token || !decodedToken.id){
       return res.status(401).json({error: 'token missing or invalid'})
     }
     checkTitleAndUrl(req.body, res);

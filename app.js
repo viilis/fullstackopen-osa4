@@ -27,9 +27,9 @@ mongoose.connect(config.MONGODB_URI, {
 app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
-app.use('/api/blogs', BRouter.blogRouter);
 app.use('/api/users', URouter.userRouter);
 app.use('/api/login', LRouter.loginRouter);
+app.use('/api/blogs', BRouter.blogRouter);
 app.use(middleware.errorHandler);
 
 module.exports = app;

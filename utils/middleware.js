@@ -9,7 +9,6 @@ const requestLogger = (req, res, next) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  console.log('errorHandler used');
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' });
   }
@@ -25,7 +24,16 @@ const errorHandler = (error, req, res, next) => {
   next(error);
 };
 
+const tokenExtractor = (req,res,next) => {
+  const aut = req.get('authorization')
+  if(aut && aut.toLowerCase().startsWith('bearer ')){
+    req.token = aut.substring(7)
+  }
+  next()
+}
+
 module.exports = {
   requestLogger,
   errorHandler,
+  tokenExtractor,
 };
