@@ -8,6 +8,7 @@ const config = require('./utils/config');
 const BRouter = require('./controllers/blogs');
 const URouter = require('./controllers/users');
 const LRouter = require('./controllers/login');
+const TRouter = require('./controllers/testing');
 
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
@@ -30,6 +31,7 @@ app.use(middleware.requestLogger);
 app.use('/api/users', URouter.userRouter);
 app.use('/api/login', LRouter.loginRouter);
 app.use('/api/blogs', BRouter.blogRouter);
+app.use('/api/testing', TRouter.testRouter);
 app.use(middleware.errorHandler);
 
 module.exports = app;
