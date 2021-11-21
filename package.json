@@ -7,7 +7,8 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint  .",
-    "test": "NODE_ENV=test jest --verbose --silent=false --runInBand"
+    "test": "NODE_ENV=test jest --verbose --silent=false --runInBand",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "author": "dogedox",
   "license": "ISC",

@@ -1,6 +1,6 @@
+const jwt = require('jsonwebtoken');
 const logger = require('./logger');
-const jwt = require('jsonwebtoken')
-const config = require('./config')
+const config = require('./config');
 
 const requestLogger = (req, res, next) => {
   logger.info('Method: ', req.method);
@@ -26,23 +26,23 @@ const errorHandler = (error, req, res, next) => {
   next(error);
 };
 
-const tokenExtractor = (req,res,next) => {
-  const aut = req.get('authorization')
-  if(aut && aut.toLowerCase().startsWith('bearer ')){
-    req.token = aut.substring(7)
+const tokenExtractor = (req, res, next) => {
+  const aut = req.get('authorization');
+  if (aut && aut.toLowerCase().startsWith('bearer ')) {
+    req.token = aut.substring(7);
   }
-  next()
-}
+  next();
+};
 
-const userExtractor = (req,res,next) => {
-  const decodedToken = jwt.verify(req.token,config.SECRET)
-  if(!req.token || !decodedToken.id){
-    return res.status(401).json({error: 'token missing or invalid'})
-  }else{
-    req.user = decodedToken.id
+const userExtractor = (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, config.SECRET);
+  if (!req.token || !decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' });
   }
-  next()
-}
+  req.user = decodedToken.id;
+
+  next();
+};
 
 module.exports = {
   requestLogger,

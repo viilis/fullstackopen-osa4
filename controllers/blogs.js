@@ -1,10 +1,7 @@
 const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
-const { findByIdAndUpdate } = require('../models/user');
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
-const config = require('../utils/config')
-const middleware = require('../utils/middleware')
+const User = require('../models/user');
+const middleware = require('../utils/middleware');
 
 const undefCheck = (element) => {
   if ((typeof element === 'undefined') || (element === '') || (element == null)) {
@@ -20,37 +17,38 @@ const checkTitleAndUrl = (body, res) => {
   }
 };
 
-const checkIfNoUsers = (users,res) => {
-  if(users.length === 0){
-    return res.status(400).send({error: 'No user found. Please create user first'})
+// eslint-disable-next-line no-unused-vars
+const checkIfNoUsers = (users, res) => {
+  if (users.length === 0) {
+    return res.status(400).send({ error: 'No user found. Please create user first' });
   }
-  else{
-    return users
-  }
-}
 
-const getToken = req => {
-  const aut = req.get('authorization')
-  if(aut && aut.toLowerCase().startsWith('bearer ')){
-    return aut.substring(7)
+  return users;
+};
+
+// eslint-disable-next-line no-unused-vars
+const getToken = (req) => {
+  const aut = req.get('authorization');
+  if (aut && aut.toLowerCase().startsWith('bearer ')) {
+    return aut.substring(7);
   }
-  return null
-}
-blogRouter.use(middleware.tokenExtractor)
-blogRouter.use(middleware.userExtractor)
+  return null;
+};
 
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('users');
   res.json(blogs.map((blog) => blog.toJSON()));
 });
 
+blogRouter.use(middleware.tokenExtractor);
+blogRouter.use(middleware.userExtractor);
+
 blogRouter.post('/', async (req, res, next) => {
   try {
-
     checkTitleAndUrl(req.body, res);
 
-    const user = await User.findById(req.user)
-    
+    const user = await User.findById(req.user);
+
     const like = undefCheck(req.body.likes);
 
     const blog = new Blog({
@@ -58,12 +56,12 @@ blogRouter.post('/', async (req, res, next) => {
       author: req.body.author,
       url: req.body.url,
       likes: like,
-      users: user._id
+      users: user._id,
     });
     const savedBlog = await blog.save();
 
-    user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
+    user.blogs = user.blogs.concat(savedBlog._id);
+    await user.save();
 
     res.json(savedBlog.toJSON());
   } catch (exception) {
@@ -72,25 +70,24 @@ blogRouter.post('/', async (req, res, next) => {
 });
 
 blogRouter.delete('/:id', async (req, res) => {
-  try{
+  try {
+    const user = await User.findById(req.user);
 
-    const user = await User.findById(req.user)
-    
-    if(user.blogs.filter(b => b.toString()).includes(req.params.id)){
+    if (user.blogs.filter((b) => b.toString()).includes(req.params.id)) {
       await Blog.findByIdAndRemove(req.params.id);
 
-      user.blogs = user.blogs.filter(b => b.toString() !== req.params.id)
-      await user.save()
+      user.blogs = user.blogs.filter((b) => b.toString() !== req.params.id);
+      await user.save();
 
       const allBlogs = await Blog.find({});
       allBlogs.map((b) => b.toJSON());
 
       res.status(204).json(allBlogs);
+    } else {
+      res.status(400).json({ error: 'blogID is invalid' });
     }
-    else{
-      res.status(400).json({error: 'blogID is invalid'})
-    }
-  }catch(e){
+  } catch (e) {
+    // eslint-disable-next-line no-undef
     next(e);
   }
 });
