@@ -69,7 +69,7 @@ blogRouter.post('/', async (req, res, next) => {
   }
 });
 
-blogRouter.delete('/:id', async (req, res) => {
+blogRouter.delete('/:id', async (req, res, next) => {
   try {
     const user = await User.findById(req.user);
 
@@ -86,9 +86,8 @@ blogRouter.delete('/:id', async (req, res) => {
     } else {
       res.status(400).json({ error: 'blogID is invalid' });
     }
-  } catch (e) {
-    // eslint-disable-next-line no-undef
-    next(e);
+  } catch (exception) {
+    next(exception);
   }
 });
 
